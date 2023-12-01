@@ -33,3 +33,7 @@ variable "subnets" {
   }
 }
 
+variable "aws_key_pair" {
+  type    = string
+  default = "your_key_pair_name"
+}

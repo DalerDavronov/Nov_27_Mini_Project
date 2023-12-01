@@ -1,3 +1,7 @@
+resource "aws_key_pair" "Nov_27_Mini_Project" {
+  key_name   = var.aws_key_pair
+  public_key = file("~/.ssh/id_ed25519.pub")
+}
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
   enable_dns_support = true
@@ -7,6 +11,62 @@ resource "aws_vpc" "main" {
   }
 }
 
+resource "aws_instance" "instance1" {
+  ami             = "ami-0230bd60aa48260c6"
+  instance_type   = "t2.micro"
+  key_name        = var.aws_key_pair
+  vpc_security_group_ids = ["sg-03338ba344b0750c7"]
+  security_groups = [aws_security_group.allow_http.id]
+
+  user_data = <<-EOF
+              #!/bin/bash
+              echo "Hello World from $(hostname -f)" > /var/www/html/index.html
+              systemctl enable httpd
+              systemctl start httpd
+              EOF
+
+  tags = {
+    Name = "App Server Instance"
+  }
+}
+
+resource "aws_instance" "instance2" {
+  ami             = "ami-0230bd60aa48260c6"
+  instance_type   = "t2.micro"
+  key_name        = var.aws_key_pair
+  vpc_security_group_ids = ["sg-03338ba344b0750c7"]
+  security_groups = [aws_security_group.allow_http.id]
+
+  user_data = <<-EOF
+              #!/bin/bash
+              echo "Hello World from $(hostname -f)" > /var/www/html/index.html
+              systemctl enable httpd
+              systemctl start httpd
+              EOF
+
+  tags = {
+    Name = "Dev Server Instance"
+  }
+}
+
+resource "aws_instance" "instance3" {
+  ami             = "ami-0230bd60aa48260c6"
+  instance_type   = "t2.micro"
+  key_name        = var.aws_key_pair
+  vpc_security_group_ids = ["sg-03338ba344b0750c7"]
+  security_groups = [aws_security_group.allow_http.id]
+
+  user_data = <<-EOF
+              #!/bin/bash
+              echo "Hello World from $(hostname -f)" > /var/www/html/index.html
+              systemctl enable httpd
+              systemctl start httpd
+              EOF
+
+  tags = {
+    Name = "Web Server Instance"
+  }
+}
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
   tags = {
@@ -96,73 +156,14 @@ resource "aws_security_group" "allow_http" {
   }
 }
 
-
-
-resource "aws_instance" "App_Server" {
-  ami             = "ami-0230bd60aa48260c6"
-  instance_type   = "t2.micro"
-  key_name        = "ec2labhomework"
-  vpc_security_group_ids = ["sg-03338ba344b0750c7"]
-  security_groups = [aws_security_group.allow_http.id]
-
-  user_data = <<-EOF
-              #!/bin/bash
-              echo "Hello World from $(hostname -f)" > /var/www/html/index.html
-              systemctl enable httpd
-              systemctl start httpd
-              EOF
-
-  tags = {
-    Name = "App Server Instance"
-  }
-}
-
-resource "aws_instance" "Dev_Server" {
-  ami             = "ami-0230bd60aa48260c6"
-  instance_type   = "t2.micro"
-  key_name        = "ec2labhomework" 
-  vpc_security_group_ids = ["sg-03338ba344b0750c7"]
-  security_groups = [aws_security_group.allow_http.id]
-
-  user_data = <<-EOF
-              #!/bin/bash
-              echo "Hello World from $(hostname -f)" > /var/www/html/index.html
-              systemctl enable httpd
-              systemctl start httpd
-              EOF
-
-  tags = {
-    Name = "Dev Server Instance"
-  }
-}
-
-resource "aws_instance" "Web_Server" {
-  ami             = "ami-0230bd60aa48260c6"
-  instance_type   = "t2.micro"
-  key_name        = "ec2labhomework"
-  vpc_security_group_ids = ["sg-03338ba344b0750c7"]
-  security_groups = [aws_security_group.allow_http.id]
-
-  user_data = <<-EOF
-              #!/bin/bash
-              echo "Hello World from $(hostname -f)" > /var/www/html/index.html
-              systemctl enable httpd
-              systemctl start httpd
-              EOF
-
-  tags = {
-    Name = "Web Server Instance"
-  }
-}
-
 output "App_Server_ip" {
-  value = aws_instance.App_Server.public_ip
+  value = aws_instance.instance1.public_ip
 }
 
 output "Dev_Server_ip" {
-  value = aws_instance.Dev_Server.public_ip
+  value = aws_instance.instance2.public_ip
 }
 
 output "Web_Server_ip" {
-  value = aws_instance.Web_Server.public_ip
+  value = aws_instance.instance3.public_ip
 }
