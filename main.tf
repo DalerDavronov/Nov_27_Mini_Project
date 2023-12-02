@@ -16,7 +16,7 @@ resource "aws_instance" "instance1" {
   instance_type   = "t2.micro"
   key_name        = var.aws_key_pair
   vpc_security_group_ids = ["sg-03338ba344b0750c7"]
-  security_groups = [aws_security_group.allow_http.id]
+  # security_groups = [aws_security_group.allow_http.id]
 
   user_data = <<-EOF
               #!/bin/bash
@@ -35,7 +35,7 @@ resource "aws_instance" "instance2" {
   instance_type   = "t2.micro"
   key_name        = var.aws_key_pair
   vpc_security_group_ids = ["sg-03338ba344b0750c7"]
-  security_groups = [aws_security_group.allow_http.id]
+  # security_groups = [aws_security_group.allow_http.id]
 
   user_data = <<-EOF
               #!/bin/bash
@@ -54,7 +54,7 @@ resource "aws_instance" "instance3" {
   instance_type   = "t2.micro"
   key_name        = var.aws_key_pair
   vpc_security_group_ids = ["sg-03338ba344b0750c7"]
-  security_groups = [aws_security_group.allow_http.id]
+  # security_groups = [aws_security_group.allow_http.id]
 
   user_data = <<-EOF
               #!/bin/bash
