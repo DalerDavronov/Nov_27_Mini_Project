@@ -1,43 +1,80 @@
-variable "subnets" {
-  default = {
-    public_us_east_1a = {
-      cidr_block             = "10.0.1.0/24"
-      availability_zone       = "us-east-1a"
-      
-    }
-    public_us_east_1b = {
-      cidr_block             = "10.0.2.0/24"
-      availability_zone       = "us-east-1b"
-      
-    }
-   public_us_east_1c = {
-      cidr_block             = "10.0.3.0/24"
-      availability_zone       = "us-east-1c"
-      
-    } 
-  }
+variable "security_groups" {
+  description = "A map of security groups with their rules"
+  type = map(object({
+    description = string
+    ingress_rules = optional(list(object({
+      description = optional(string)
+      priority    = optional(number)
+      from_port   = number
+      to_port     = number
+      protocol    = string
+      cidr_blocks = list(string)
+    })))
+    egress_rules = list(object({
+      description = optional(string)
+      priority    = optional(number)
+      from_port   = number
+      to_port     = number
+      protocol    = string
+      cidr_blocks = list(string)
+    }))
+  }))
 }
+
+variable "subnets" {
+  type = map(object({
+    cidr_block        = string
+    availability_zone = string
+  }))
+}
+variable "prefix" {
+  type    = string
+  default = "mini_project"
+}
+# variable "subnets" {
+#   type = map(object({
+#     name              = string
+#     cidr_block        = string
+#     availability_zone = string
+#   }))
+
+#   default = {
+#     app = {
+#       name              = "APP"
+#       cidr_block        = "10.0.5.0/24"
+#       availability_zone = "us-east-1a"
+#     },
+#     dev = {
+#       name              = "DEV"
+#       cidr_block        = "10.0.6.0/24"
+#       availability_zone = "us-east-1b"
+#     },
+#     web = {
+#       name              = "WEB"
+#       cidr_block        = "10.0.7.0/24"
+#       availability_zone = "us-east-1c"
+#     },
+#   }
+# }
+# variable "prefix" {
+#   type    = string
+#   default = "mini_project"
+# }
 variable "instances" {
   type = map(object({
-    ami           = string
-    instance_type = string
-    key_name      = string
+    subnet_name = string,
+    # cidr_block = string
+    # availability_zone = string
   }))
   default = {
-    instance1 = {
-      ami           = "ami-0230bd60aa48260c6",
-      instance_type = "t2.micro",
-      key_name      = "Web server",
-    },
-    instance2 = {
-      ami           = "ami-0230bd60aa48260c6",
-      instance_type = "t2.micro",
-      key_name      = "App Server",
-    },
-    instance3 = {
-      ami           = "ami-0230bd60aa48260c6",
-      instance_type = "t2.micro",
-      key_name      = "Dev Server",
-    },
+    App = {
+      subnet_name = "pub_sub_1"
+    }
+    Dev = {
+      subnet_name = "pub_sub_2"
+    }
+    Web = {
+      subnet_name = "pub_sub_3"
+    }
   }
 }
