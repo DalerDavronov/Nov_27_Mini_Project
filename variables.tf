@@ -29,37 +29,9 @@ variable "subnets" {
 }
 variable "prefix" {
   type    = string
-  default = "mini_project"
+  default = "default"
 }
-# variable "subnets" {
-#   type = map(object({
-#     name              = string
-#     cidr_block        = string
-#     availability_zone = string
-#   }))
 
-#   default = {
-#     app = {
-#       name              = "APP"
-#       cidr_block        = "10.0.5.0/24"
-#       availability_zone = "us-east-1a"
-#     },
-#     dev = {
-#       name              = "DEV"
-#       cidr_block        = "10.0.6.0/24"
-#       availability_zone = "us-east-1b"
-#     },
-#     web = {
-#       name              = "WEB"
-#       cidr_block        = "10.0.7.0/24"
-#       availability_zone = "us-east-1c"
-#     },
-#   }
-# }
-# variable "prefix" {
-#   type    = string
-#   default = "mini_project"
-# }
 variable "instances" {
   type = map(object({
     subnet_name = string,
